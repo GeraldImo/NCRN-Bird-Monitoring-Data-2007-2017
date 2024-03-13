@@ -1,0 +1,143 @@
+--Plot: ANTI. This can be used as template for the datasets generated for all 11 National Park Sites
+
+-- Site name/ table name is "ANTI"
+SELECT * FROM ANTI
+
+
+--To count the total number bird species:
+SELECT COUNT(DISTINCT Scientific_Name) AS Species_Count
+FROM ANTI
+
+--To identify the location types:
+
+SELECT DISTINCT Location_type from ANTI
+
+--To count the number of observers:
+SELECT COUNT(DISTINCT Observer) AS Observer_Count
+FROM ANTI
+
+--To identify the observer with the greatest number of birds sighted:
+--Total number of birds observed by the respective observer:
+
+SELECT Observer, COUNT(Scientific_name) AS Observer_Countings 
+FROM ANTI
+GROUP BY Observer
+ORDER BY Observer_Countings DESC
+
+--Total number of male birds observed:
+SELECT Observer, COUNT(Scientific_name) AS Observer_Countings 
+FROM ANTI
+WHERE Sex = 'Male'
+GROUP BY Observer
+ORDER BY Observer_Countings DESC
+
+--Total number of female birds:
+SELECT Observer, COUNT(Scientific_name) AS Observer_Countings 
+FROM ANTI
+WHERE Sex = 'Female'
+GROUP BY Observer
+ORDER BY Observer_Countings DESC
+
+--Total number of birds of undetermined sex:
+SELECT Observer, COUNT(Scientific_name) AS Observer_Countings 
+FROM ANTI
+WHERE Sex = 'Undetermined'
+GROUP BY Observer
+ORDER BY Observer_Countings DESC
+
+--To identify where NULL value exists in respect of sex:
+SELECT Observer, COUNT(Scientific_name) AS Observer_Countings 
+FROM ANTI
+WHERE Sex IS NULL
+GROUP BY Observer
+ORDER BY Observer_Countings DESC
+
+--To identify the observer with the greatest number of birds observations at height 50 to 100 meters:
+SELECT Observer, COUNT(Scientific_name) AS Observer_Countings 
+FROM ANTI
+WHERE Distance = '50 - 100 Meters'
+GROUP BY Observer
+ORDER BY Observer_Countings DESC
+
+--To identify the bird species sighted within high altitude ranges:
+SELECT Common_Name, COUNT(Scientific_name) AS High_flyers 
+FROM ANTI
+WHERE Distance = '50 - 100 Meters'
+GROUP BY Common_Name
+ORDER BY High_flyers DESC
+
+--or:
+SELECT MAX(Scientific_Name) AS Scientific_Name, COUNT(Scientific_name) AS High_flyers
+FROM ANTI
+WHERE Distance = '50 - 100 Meters'
+GROUP BY Common_Name
+ORDER BY High_flyers DESC
+
+--To identify the bird species sighted within low altitude ranges:
+SELECT MAX(Scientific_Name) AS Scientific_Name, COUNT(Scientific_name) AS High_flyers
+FROM ANTI
+WHERE Distance = '<= 50 Meters'
+GROUP BY Common_Name
+ORDER BY High_flyers DESC
+
+--or:
+SELECT MAX(Scientific_Name) AS Scientific_Name, COUNT(Scientific_name) AS Low_flyers
+FROM ANTI
+GROUP BY Common_Name
+ORDER BY Low_flyers DESC
+
+--To identify the bird species sighted within low altitude ranges in the forest area:
+SELECT DISTINCT Scientific_Name, Location_Type 
+FROM ANTI
+WHERE Location_Type = 'forest' and Distance = '<= 50 Meters'
+
+--counting them:
+SELECT COUNT (DISTINCT Scientific_name) AS Low_flyers
+FROM ANTI
+WHERE Location_Type = 'forest' and Distance = '<= 50 Meters'
+
+--To identify the bird species sighted within high altitude ranges in the forest:
+SELECT DISTINCT Scientific_Name, Location_Type 
+FROM ANTI
+WHERE Location_Type = 'forest' and Distance = '50 - 100 Meters'
+
+--counting them:
+SELECT COUNT (DISTINCT Scientific_name) AS High_flyers
+FROM ANTI
+WHERE Location_Type = 'forest' and Distance = '50 - 100 Meters'
+
+--to identify the most frequently sighted male in the low altitude forest region:
+SELECT MAX(DISTINCT Scientific_name) AS Scientific_Name, 
+COUNT(DISTINCT Scientific_name) AS Observer_Count_Male 
+FROM ANTI
+WHERE Sex = 'Male'
+AND Location_Type = 'Forest'
+--GROUP BY Observer
+ORDER BY Observer_Count_Male DESC
+
+--to identify the observers who sighted the most number of females in the high altitude forest region, the species and the number of observations:
+SELECT Observer, MAX(DISTINCT Scientific_name) AS Scientific_Name, 
+COUNT(DISTINCT Scientific_name) AS Observer_Count_female 
+FROM ANTI
+WHERE Sex = 'female' and Location_Type = 'forest' and Distance = '50 - 100 Meters'
+GROUP BY Observer
+ORDER BY Observer_Count_female DESC
+
+--to identify the observers who sighted the most number of females in the low altitude forest region, the species and the number of observations:
+SELECT Observer, MAX(DISTINCT Scientific_name) AS Scientific_Name, 
+COUNT(DISTINCT Scientific_name) AS Observer_Count_female 
+FROM ANTI
+WHERE Sex = 'female' AND Location_Type = 'forest' AND Distance = '<= 50 Meters'
+GROUP BY Observer
+ORDER BY Observer_Count_female DESC
+
+SELECT MAX(DISTINCT Scientific_name) AS Scientific_Name, 
+COUNT(DISTINCT Scientific_name) AS Observer_Count_female 
+FROM ANTI
+WHERE Sex = 'female'
+AND Distance = '<= 50 Meters'
+--GROUP BY Observer
+ORDER BY Observer_Count_female DESC
+
+
+
